@@ -1,0 +1,1 @@
+</div><footer class="app-footer">© <?= date('Y') ?> STOK KITA <span>·</span> Satu Sistem, Kelola Stok Lebih Mudah.</footer></main></div><script src="assets/js/app.js"></script><script>if(window.lucide){lucide.createIcons();}</script></body></html>

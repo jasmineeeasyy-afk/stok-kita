@@ -1,0 +1,6 @@
+<?php
+require_once __DIR__.'/../includes/auth_check.php';require_once __DIR__.'/../config/database.php';if($_SERVER['REQUEST_METHOD']!=='POST')redirect('index.php');verify_csrf();
+$uid=current_user_id();$id=(int)($_POST['id']??0);$code=trim($_POST['kode_barang']??'');$name=trim($_POST['nama_barang']??'');$category=(int)($_POST['category_id']??0)?:null;$unit=trim($_POST['satuan']??'pcs');$stock=(int)($_POST['stok']??0);$min=(int)($_POST['stok_minimum']??0);$desc=trim($_POST['deskripsi']??'');
+if($code===''||$name===''||$unit===''||$stock<0||$min<0){flash('error','Periksa kembali data barang.');redirect($id?'edit.php?id='.$id:'create.php');}
+try{if($id){$s=$pdo->prepare('UPDATE products SET kode_barang=?,nama_barang=?,category_id=?,satuan=?,stok=?,stok_minimum=?,deskripsi=? WHERE id=? AND user_id=?');$s->execute([$code,$name,$category,$unit,$stock,$min,$desc,$id,$uid]);}else{$s=$pdo->prepare('INSERT INTO products(user_id,kode_barang,nama_barang,category_id,satuan,stok,stok_minimum,deskripsi) VALUES(?,?,?,?,?,?,?,?)');$s->execute([$uid,$code,$name,$category,$unit,$stock,$min,$desc]);}flash('success','Data barang berhasil disimpan.');}catch(PDOException $e){flash('error',$e->getCode()==='23000'?'Kode barang sudah digunakan.':'Gagal menyimpan data barang.');}
+redirect('index.php');

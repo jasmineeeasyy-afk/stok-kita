@@ -1,0 +1,53 @@
+CREATE DATABASE IF NOT EXISTS stok_kita CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE stok_kita;
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  nama_lengkap VARCHAR(100) NOT NULL,
+  username VARCHAR(30) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS categories (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT UNSIGNED NOT NULL,
+  nama_kategori VARCHAR(80) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_category_user (user_id, nama_kategori),
+  CONSTRAINT fk_categories_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS products (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT UNSIGNED NOT NULL,
+  category_id BIGINT UNSIGNED NULL,
+  kode_barang VARCHAR(40) NOT NULL,
+  nama_barang VARCHAR(120) NOT NULL,
+  satuan VARCHAR(30) NOT NULL DEFAULT 'pcs',
+  stok INT UNSIGNED NOT NULL DEFAULT 0,
+  stok_minimum INT UNSIGNED NOT NULL DEFAULT 5,
+  deskripsi TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_product_code_user (user_id, kode_barang),
+  KEY idx_products_user_stock (user_id, stok),
+  CONSTRAINT fk_products_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_products_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS stock_transactions (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT UNSIGNED NOT NULL,
+  product_id BIGINT UNSIGNED NOT NULL,
+  jenis ENUM('masuk','keluar') NOT NULL,
+  jumlah INT UNSIGNED NOT NULL,
+  stok_sebelum INT UNSIGNED NOT NULL,
+  stok_sesudah INT UNSIGNED NOT NULL,
+  keterangan VARCHAR(255) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  KEY idx_transactions_user_date (user_id, created_at),
+  CONSTRAINT fk_transactions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_transactions_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+) ENGINE=InnoDB;

@@ -1,4 +1,17 @@
-# STOK KITA — PHP Native + MySQL
+# STOK KITA — Sistem Monitoring dan Pencatatan Stok Barang untuk UMKM Berbasis Web
+
+Aplikasi web manajemen inventaris berbasis **PHP Native** dan **MySQL** untuk membantu pelaku UMKM dalam pencatatan katalog barang, transaksi stok masuk/keluar, pelacakan riwayat mutasi, serta pemantauan peringatan stok minimum.
+
+## Identitas Kelompok
+- **Nama Kelompok:** YANG PENTING LIMA
+- **Judul Proyek Akhir:** Sistem Monitoring dan Pencatatan Stok Barang untuk UMKM Berbasis Web
+
+### Anggota Kelompok
+1. **M. Irfan Pasya** — `24312188`
+2. **Ajaya Haposan Firdaus** — `24312099`
+3. **Luthfia Jasmine Asy Syifa** — `24312110`
+4. **Zarir Azizah Munawaroh** — `24312053`
+5. **Alicea Calista** — `24312136`
 
 ## Persyaratan
 - XAMPP (Apache dan MySQL)
@@ -6,7 +19,7 @@
 - Browser modern
 
 ## Instalasi
-1. Ekstrak folder `stok-kita` ke `C:\xampp\htdocs\`.
+1. Ekstrak atau clone folder `stok-kita` ke `C:\xampp\htdocs\`.
 2. Jalankan Apache dan MySQL dari XAMPP Control Panel.
 3. Buka `http://localhost/phpmyadmin`.
 4. Pilih menu **Import**, lalu impor `database/stok_kita.sql`.
@@ -30,4 +43,10 @@
 - Kategori sudah disiapkan pada skema database. Versi awal ini menyediakan relasi kategori pada barang, tetapi pengelolaan kategori khusus belum dibuat sebagai halaman terpisah.
 - Stok awal pada formulir barang digunakan untuk memasukkan saldo awal. Perubahan stok berikutnya sebaiknya dilakukan melalui menu transaksi.
 - Untuk penggunaan produksi, aktifkan HTTPS, atur kredensial database yang kuat, nonaktifkan error display, dan lakukan backup database secara berkala.
-"# stok-kita" 
+
+## Dokumen Proyek
+- [Product Requirements Document (PRD.md)](./PRD.md)
+
+## Log Pengerjaan & Kendala — Pertemuan 1 (19 November 2026)
+- **Hasil Pengerjaan:** Menentukan judul proyek akhir dan tim kelompok **YANG PENTING LIMA**, menyusun `PRD.md` dan `README.md`, menyiapkan skema database `database/stok_kita.sql`, mengimplementasikan modul inti aplikasi, serta mengunggah proyek ke repository GitHub.
+- **Kendala & Solusi:** Menjaga isolasi data antar pengguna UMKM dan konsistensi stok saat transaksi keluar/masuk; diselesaikan dengan pemfilteran kepemilikan data per akun, token CSRF, serta transaksi database dengan penguncian stok (*stock locking*).
